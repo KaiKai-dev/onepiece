@@ -7,8 +7,6 @@ import { auth } from '$lib/firebaseClient';
     async function logout(){
         try {
             await signOut(auth)
-
-            console.log('Babay jeffrey')
         } catch (error) {
             alert(error.code)
         }
@@ -16,7 +14,9 @@ import { auth } from '$lib/firebaseClient';
 
 
 </script>
-
+<svelte:head>
+	<title>One Piece World</title>
+</svelte:head>
 <main>
 <section class="index-banner" >
     <div class="vertical-center">
