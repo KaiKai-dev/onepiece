@@ -1,9 +1,10 @@
 <script>
-import { auth } from '$lib/firebaseClient';
-
+    import { auth, db } from '$lib/firebaseClient';
+    import { collection, query, where, onSnapshot, orderBy} from 'firebase/firestore'
     import {session} from '$lib/stores'
     import { signOut } from 'firebase/auth'
-
+    let cart = [];
+    
     async function logout(){
         try {
             await signOut(auth)
@@ -12,6 +13,23 @@ import { auth } from '$lib/firebaseClient';
         }
     }
 
+    async function getCartItems(){
+        const cartItemsRef = collection(db, 'cartItems')
+        const q = query(cartItemsRef, where('owner', '==', auth.currentUser.uid), orderBy('createdAt'))
+        onSnapshot(q, (snapshot) => {
+            snapshot.forEach((doc) => {
+                console.log('dapat gumana')
+                // cart.push(doc.data())
+
+                cart = [...cart, doc.data()]
+            })
+        })
+    }
+
+    $: if($session != null){
+       
+        getCartItems();
+    }
 
 </script>
 <svelte:head>
@@ -58,17 +76,21 @@ import { auth } from '$lib/firebaseClient';
             <h3>Contact</h3>
         </div>
     </a>
-    <!-- <a href="suggestion.html">
+    <a href="/suggestion">
     <div class="index-boxlink-square">
         <h3>Suggestions</h3>
     </div>
-    </a> -->
+    </a>
 </section>
 
 {:else}
 <h1>What's Up {($session.displayName)}!</h1>
-<button on:click={logout}>Logout
-</button>
+<button on:click={logout}>Logout</button>
+
+{#each cart as item}
+    <li>{item.name} - {item.quantity}</li>
+{/each}
+
 {/if}
 </main>
 

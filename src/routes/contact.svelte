@@ -19,12 +19,14 @@
 
     }
 </script>
-
+<svelte:head>
+	<title>Contact - One Piece World</title>
+</svelte:head>
 <main>
     <section class="index-banner">
         <div class="signup">
         <h1>Send us a Message</h1>
-        <form on:submit|preventDefault={submitHandler}>
+        <form on:submit|preventDefault={submitHandler} class="form">
             <div class="txt_field">
             <input name='name' type="text" placeholder="Name" required>
             <span></span>

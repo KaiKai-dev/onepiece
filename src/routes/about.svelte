@@ -1,3 +1,7 @@
+<svelte:head>
+	<title>About Us - One Piece World</title>
+</svelte:head>
+
 <main>
     <section class="index-banner">
         <div class="vertical-center">

@@ -13,19 +13,20 @@ import { goto } from '$app/navigation';
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
 
       await updateProfile(userCredential.user, {displayName: firstName + ' ' + lastName})
-      console.log('Created user ' + firstName + ' ' + lastName) 
       goto('/')
     }catch(error){
       alert(error.code)
     }
   }
 </script>
-
+<svelte:head>
+	<title>Sign Up - One Piece World</title>
+</svelte:head>
 <main>
     <section class="index-banner" >
       <div class="signup">
         <h1>Sign Up</h1>
-        <form on:submit|preventDefault={submitHandler}>
+        <form on:submit|preventDefault={submitHandler} class="form">
           <div class="txt_field">
             <input name="firstName" type="text" placeholder="First Name" required>
             <span></span>
@@ -44,7 +45,7 @@ import { goto } from '$app/navigation';
                 </div>
           <input type="submit" value="Sign Up">
           <div class="logsign_link">
-            Already have an account? <a href="logshop.html">Log In</a>
+            Already have an account? <a href="/login">Log In</a>
           </div>
         </form>
       </div>
