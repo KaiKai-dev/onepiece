@@ -5,6 +5,7 @@
     import { signOut } from 'firebase/auth'
     let cart = [];
     
+    // logout function
     async function logout(){
         try {
             await signOut(auth)
@@ -13,13 +14,14 @@
         }
     }
 
+    // get items from cart
     async function getCartItems(){
         const cartItemsRef = collection(db, 'cartItems')
         const q = query(cartItemsRef, where('owner', '==', auth.currentUser.uid), orderBy('createdAt'))
         onSnapshot(q, (snapshot) => {
             snapshot.forEach((doc) => {
-                console.log('dapat gumana')
-                // cart.push(doc.data())
+                // console.log('dapat gumana')
+                // // cart.push(doc.data())
 
                 cart = [...cart, doc.data()]
             })
@@ -58,7 +60,7 @@
     </a>
     <a href={"/shop"}>
         <div class="index-boxlink-rectangle">
-            <h3>Shop Now</h3>
+            <h3>Store</h3>
         </div>
     </a>
     <!-- <a href="index.html">
@@ -86,7 +88,7 @@
 {:else}
 <h1>What's Up {($session.displayName)}!</h1>
 <button on:click={logout}>Logout</button>
-
+<p>Your orders are:</p>
 {#each cart as item}
     <li>{item.name} - {item.quantity}</li>
 {/each}

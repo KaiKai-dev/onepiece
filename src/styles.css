@@ -339,6 +339,7 @@ Twitter: @rich_clark
     height: 100px;
     background-color: #357394;
     border-radius: 40px;
+    /* overflow: ; */
   }
 
   .index-links div:hover{
@@ -353,6 +354,7 @@ Twitter: @rich_clark
     color: #111;
     text-align: center;
     text-transform: uppercase;
+    overflow: hidden;  
   }
   .index-links div h3:hover{
     color: white;

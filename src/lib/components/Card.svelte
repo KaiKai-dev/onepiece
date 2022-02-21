@@ -35,6 +35,7 @@
         justify-content: center;
         align-items: space-between;
     }
+
     button{
         display: flex;
         align-items: center;
@@ -48,11 +49,24 @@
         border-radius: 10px;
         box-shadow: 0px 3px 5px rgba(0,0,0,0.4);
     }
+
     img {
         width: 80%;
         height: 80%;
+        border-radius: 15px;
+        border: 1px black solid;
     }
 
+    h1 {
+        padding: 5px 0;
+        font-family: "Roboto", sans-serif;
+        font-size: 20px;
+    }
+
+    h2 {
+        font-family: "Roboto", sans-serif;
+        color: rgba(0,0,0,0.6)
+    }
     @media screen and (max-width: 500px){
         button {
             display: flex;
