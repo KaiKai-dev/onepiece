@@ -44,14 +44,11 @@
     $: if($session != null){
        
         // getCartItems();
-       
         const cartItemsRef = collection(db, 'cartItems')
-        const q = query(cartItemsRef, where('owner', '==', auth.currentUser.uid), orderBy('createdAt'))
+        const q = query(cartItemsRef, where('owner', '==', $session.uid), orderBy('createdAt'))
         onSnapshot(q, (snapshot) => {
             cart = []
             snapshot.forEach((docSnap) => {
-                // console.log('dapat gumana')
-                // // cart.push(doc.data())
 
                 cart = [...cart,{ ...docSnap.data(), id:docSnap.id}]
             })
