@@ -5,10 +5,14 @@
 	import { auth, db } from '$lib/firebaseClient';
 	import { scale } from 'svelte/transition'
 	import { goto } from '$app/navigation';
-	import { addDoc, collection, serverTimestamp} from 'firebase/firestore'
-	
-	
-	
+	import { addDoc, collection, serverTimestamp} from 'firebase/firestore';
+
+	let quantity = 1;
+	let price=0;
+
+	$: if($itemToAdd != null){
+		price = quantity * $itemToAdd.price;
+	}
 
 	onAuthStateChanged(auth, (user) => {
 		$session = user;
@@ -36,6 +40,7 @@
             await addDoc(cartItemsRef, data) 
             event.target.reset()
             
+			quantity = 1;
 			$showMenu = false;
 			
         }catch(error){
@@ -43,7 +48,20 @@
         }
 
     }
+	
+	function qtyHandler(event){
+		const formData = new FormData(event.target)
+        let data = Object.fromEntries(formData)
 
+		price = data.quantity.value * data.price2.value
+	}
+	// function priceHandler(event) {
+	// 	const formData = new FormData(event.target)
+    //     let data = Object.fromEntries(formData)
+
+	// 	price = data.price * 
+	// }
+	
 	// function addToCart(event){
 	// 	if($session == null){
 	// 		$showMenu = false;
@@ -60,23 +78,34 @@
 	// }
 
 </script>
+
 {#if $showMenu}
 	<section on:click|self={() => $showMenu = false}>
 		<div transition:scale>
+
 			<img src={$itemToAdd.image} alt={$itemToAdd.name}>
-			<!-- <h2>{$itemToAdd.name}</h2>
-			<h3>Php {$itemToAdd.price}</h3> -->
+			
 			<form on:submit|preventDefault={submitHandler} id="formMenu">
 				<input type="text" readonly id="name" name="name" value={$itemToAdd.name}>
-				<input type="text" readonly id="price" name="price" value="Php {$itemToAdd.price}">
-				<input type="button" id="minusQuantity" name="minusQuantity" value="-">
-				<input type="number" name='quantity' required value="1" min="1" class="quantityBar">
-				<input type="button" id="plusQuantity" name="plusQuantity" value="+">
+				<span id="price">
+					₱
+					<input type="text" readonly name="price" bind:value={$itemToAdd.price}>
+				</span>
+				
+				
+				<input type="button" on:click={() => quantity -= 1} id="minusQuantity" name="minusQuantity" value="-">
+				<input type="number" name='quantity' required bind:value={quantity} min="1" class="quantityBar">
+				<input type="button" on:click={() => quantity += 1} id="plusQuantity" name="plusQuantity" value="+">
+				
+				<input type="text"  name='total_qty'  bind:value={price} min="0" id="priceBar" >
 				<input type="hidden" name="fileName" value={$itemToAdd.fileName} >
 				<!-- <p>{() => ($itemTo)}</p> -->
+
 				<button type='submit'>Add to Cart</button>
 			</form>
-			<button on:click={() => $showMenu = false} id="closebtn">X</button>
+
+			<button on:click={() => {$showMenu = false; quantity=1;}} id="closebtn">X</button>
+
 		</div>
 	</section>
 {/if}
@@ -140,8 +169,54 @@
 		height: 2rem;
 		width: 100px;
 		border: 1px black solid;
-		border-radius: 5px;
+		border-radius: 20px;
 		text-align: center;
+
+		position: absolute;
+		transform: translate(40%, 90%)
+	}
+
+	input[name="minusQuantity"] {
+		height: 2rem;
+		width: 2rem;
+		border: 1px black solid;
+		border-radius: 50%;
+
+		position: absolute;
+		transform: translate(10%, 101%)
+	}
+
+	input[name="plusQuantity"] {
+		height: 2rem;
+		width: 2rem;
+		border: 1px black solid;
+		border-radius: 50%;
+
+		position: absolute;
+		transform: translate(465%, 101%)
+	}
+
+	input[type="button"]:hover {
+		height: 2rem;
+		width: 2rem;
+		color: white;
+		background-color: darkgray;
+		border: 1px black solid;
+		border-radius: 50%;
+	}
+
+	input[name="plusQuantity"]:active {
+		background-color: gray;
+		position: absolute;
+		transform: translate(465%, 111%);
+
+	}
+
+	input[name="minusQuantity"]:active {
+		background-color: gray;
+		position: absolute;
+		transform: translate(10%, 111%)
+
 	}
 
 	#name {
@@ -157,37 +232,11 @@
 	#price {
 		width: 100%;
 		font-family: "Roboto", sans-serif;
-		font-size: 20px;
+		font-size: 15px;
 		text-align: center;
 		position: absolute;
 		transform: translate(15%, -430%);
 	}
-
-	input[type="button"] {
-		height: 2rem;
-		width: 2rem;
-		border: 1px black solid;
-		border-radius: 50%;
-	}
-
-	input[type="button"]:hover {
-		height: 2rem;
-		width: 2rem;
-		color: white;
-		background-color: black;
-		border: 1px black solid;
-		border-radius: 50%;
-	}
-	input[type="button"]:active {
-		height: 2rem;
-		width: 2rem;
-		color: white;
-		background-color: black;
-		border: 1px black solid;
-		border-radius: 50%;
-		transform: translate(0px, 4px);
-	}
-	
 	
 	#closebtn {
 		height: 2rem;
@@ -195,6 +244,9 @@
 		padding: 2px;
 		border-radius: 50%;
 		border: 1px black solid ;
+
+		position: absolute;
+		transform: translate(1535%, -770%)
 	}
 
 	#closebtn:hover {
@@ -206,4 +258,7 @@
 		border-radius: 50%;
 	}
 
+	#priceBar{
+		border: 1px black solid;
+	}
 </style>

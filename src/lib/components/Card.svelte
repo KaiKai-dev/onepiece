@@ -3,12 +3,12 @@
 
 
     export let product;
-    import {showMenu, itemToAdd} from '$lib/stores'
+    import {showMenu, itemToAdd} from '$lib/stores.js';
 
 
-    let cart = false;
+    // let cart = false;
 
-    function cartHandler () {
+    function cartHandler() {
         $itemToAdd = product;
         $showMenu = true;
     }

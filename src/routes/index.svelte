@@ -1,6 +1,6 @@
 <script>
     import { auth, db } from '$lib/firebaseClient';
-    import { collection, query, where, onSnapshot, orderBy} from 'firebase/firestore'
+    import { collection, query, where, onSnapshot, orderBy, doc, deleteDoc, connectFirestoreEmulator} from 'firebase/firestore'
     import {session} from '$lib/stores'
     import { signOut } from 'firebase/auth'
     let cart = [];
@@ -19,18 +19,43 @@
         const cartItemsRef = collection(db, 'cartItems')
         const q = query(cartItemsRef, where('owner', '==', auth.currentUser.uid), orderBy('createdAt'))
         onSnapshot(q, (snapshot) => {
-            snapshot.forEach((doc) => {
+            snapshot.forEach((docSnap) => {
                 // console.log('dapat gumana')
                 // // cart.push(doc.data())
 
-                cart = [...cart, doc.data()]
+                cart = [...cart,{ ...docSnap.data(), id:docSnap.id}]
             })
         })
     }
 
+    async function removeItem(id){
+        const docRef = doc(db, 'cartItems', id)
+
+        try {
+            await deleteDoc(docRef)
+            console.log('deleted')
+        } catch (error) {
+            alert(error.code)
+        }
+
+    }
+
+
     $: if($session != null){
        
-        getCartItems();
+        // getCartItems();
+       
+        const cartItemsRef = collection(db, 'cartItems')
+        const q = query(cartItemsRef, where('owner', '==', auth.currentUser.uid), orderBy('createdAt'))
+        onSnapshot(q, (snapshot) => {
+            cart = []
+            snapshot.forEach((docSnap) => {
+                // console.log('dapat gumana')
+                // // cart.push(doc.data())
+
+                cart = [...cart,{ ...docSnap.data(), id:docSnap.id}]
+            })
+        })
     }
 
 </script>
@@ -90,7 +115,8 @@
 <button on:click={logout}>Logout</button>
 <p>Your orders are:</p>
 {#each cart as item}
-    <li>{item.name} - {item.quantity}</li>
+        <li>{item.name} - {item.quantity} - {item.id} <button on:click={() => removeItem(item.id) }>Remove</button></li>
+    
 {/each}
 
 {/if}
