@@ -1,11 +1,24 @@
 <script>
     import { auth, db } from '$lib/firebaseClient';
-    import { collection, query, where, onSnapshot, orderBy, doc, deleteDoc, connectFirestoreEmulator} from 'firebase/firestore'
-    import {session} from '$lib/stores'
+    import { collection, query, where, onSnapshot, orderBy, doc, deleteDoc, connectFirestoreEmulator } from 'firebase/firestore'
+    import { session } from '$lib/stores'
     import { signOut } from 'firebase/auth'
-    import { scale } from 'svelte/transition'
     import Card from '$lib/components/CartCard.svelte';
+
     let cart = [];
+
+    $: if($session != null){
+       
+       // getCartItems();
+       const cartItemsRef = collection(db, 'cartItems')
+       const q = query(cartItemsRef, where('owner', '==', $session.uid), orderBy('createdAt'))
+       onSnapshot(q, (snapshot) => {
+           cart = []
+           snapshot.forEach((docSnap) => {
+               cart = [...cart,{ ...docSnap.data(), id:docSnap.id}]
+           })
+       })
+   }
     
     // logout function
     async function logout(){
@@ -43,19 +56,7 @@
     }
 
 
-    $: if($session != null){
-       
-        // getCartItems();
-        const cartItemsRef = collection(db, 'cartItems')
-        const q = query(cartItemsRef, where('owner', '==', $session.uid), orderBy('createdAt'))
-        onSnapshot(q, (snapshot) => {
-            cart = []
-            snapshot.forEach((docSnap) => {
-
-                cart = [...cart,{ ...docSnap.data(), id:docSnap.id}]
-            })
-        })
-    }
+    
 
 </script>
 <svelte:head>
