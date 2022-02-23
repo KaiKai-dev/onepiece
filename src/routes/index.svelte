@@ -3,6 +3,8 @@
     import { collection, query, where, onSnapshot, orderBy, doc, deleteDoc, connectFirestoreEmulator} from 'firebase/firestore'
     import {session} from '$lib/stores'
     import { signOut } from 'firebase/auth'
+    import { scale } from 'svelte/transition'
+    import Card from '$lib/components/CartCard.svelte';
     let cart = [];
     
     // logout function
@@ -108,19 +110,65 @@
 </section>
 
 {:else}
-<h1>What's Up {($session.displayName)}!</h1>
-<button on:click={logout}>Logout</button>
-<p>Your orders are:</p>
-{#each cart as item}
-        <li>{item.name} - {item.quantity} - {item.id} <button on:click={() => removeItem(item.id) }>Remove</button></li>
-    
-{/each}
+<section>
+    <h3 class="welcome">What's Up {($session.displayName)}!</h3>
+    <a name="shop" href='/shop'>Go to Shop</a>
+    <!-- <h4>Your orders are:</h4> -->
+    {#if cart.length == 0}
+        
+    <div style="height: 400px;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 999;">
+        <p style="margin: 1rem 0;
+        font-size: 50px;
+        font-weight: 2px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: bold;
+        color: rgba(0,0,0,0.5) ">
+            Ooops... Your cart is empty!
+        </p>
+        <a href="/shop">Shop now?</a>
+    </div>
 
+    {:else}
+        
+        <div style="display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            ">
+                {#each cart as item}
+                    <Card {item}></Card>
+                    <button on:click={() => removeItem(item.id)} style="font-size: 10px;">
+                        Remove
+                    </button>
+                {/each}
+        </div>
+
+    {/if}
+
+    
+    <!-- {#if cart != []}
+
+       
+    {/if} -->
+        <button on:click={logout} style="margin: 1rem 1rem;">Logout</button>
+    </section>
 {/if}
 </main>
 
 
 <style>
+    .welcome {
+        font-family: "Roboto", sans-serif;
+        font-size: 20px;
+        text-align: center;
+    }
+
     button {
         cursor: pointer;
         background-color: steelblue;
@@ -129,6 +177,19 @@
         color: white;
         border-radius: 5px;
     }
+
+    a[name='shop'] {
+        font-size: 15px;
+        font-family: 'Roboto', sans-serif;
+        cursor: pointer;
+        background-color: steelblue;
+        padding: 10px;
+        margin: 2rem 0 0 1rem;
+        font-weight: bold;
+        color: white;
+        border-radius: 5px;
+    }
+    
 </style>
 
 

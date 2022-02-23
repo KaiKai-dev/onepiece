@@ -15,7 +15,7 @@
 
         {name: 'Pervert Sanji', image: '/assets/products/sanji1.jpeg', price: "420", fileName: 'sanji1'},
         {name: 'Baratie Sanji', image: '/assets/products/sanji2.jpeg', price: "420", fileName: 'sanji2'},
-        {name: 'Diablo Jambe', image: '/assets/products/sanji3.jpeg', price: "420", fileName: 'sanji3'},
+        {name: 'Diable Jambe', image: '/assets/products/sanji3.jpeg', price: "420", fileName: 'sanji3'},
 
         {name: 'God Usopp', image: '/assets/products/ussop1.jpeg', price: "420", fileName: 'ussop1'},
 

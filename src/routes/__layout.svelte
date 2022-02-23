@@ -55,27 +55,6 @@
 
 		price = data.quantity.value * data.price2.value
 	}
-	// function priceHandler(event) {
-	// 	const formData = new FormData(event.target)
-    //     let data = Object.fromEntries(formData)
-
-	// 	price = data.price * 
-	// }
-	
-	// function addToCart(event){
-	// 	if($session == null){
-	// 		$showMenu = false;
-	// 		goto('/login')
-	// 		return;
-	// 	}
-	// 	const formData = new FormData(event.target)
-	// 	let data = Object.fromEntries(formData)
-
-	// 	$cart = [...$cart, data]
-	// 	console.log($cart)
-	// 	$showMenu = false;
-		
-	// }
 
 </script>
 
@@ -97,8 +76,13 @@
 				<input type="number" name='quantity' required bind:value={quantity} min="1" class="quantityBar">
 				<input type="button" on:click={() => quantity += 1} id="plusQuantity" name="plusQuantity" value="+">
 				
-				<input type="text"  name='total_qty'  bind:value={price} min="0" id="priceBar" >
+				<span id="totalPrice">
+					<label for="total_price">Total Price: ₱</label>
+					<input type="text"  name='total_price'  bind:value={price} min="0" id="priceBar" >
+				</span> 
+				
 				<input type="hidden" name="fileName" value={$itemToAdd.fileName} >
+				<input type="hidden" name="image" value={$itemToAdd.image} >
 				<!-- <p>{() => ($itemTo)}</p> -->
 
 				<button type='submit'>Add to Cart</button>
@@ -114,7 +98,6 @@
 	<a href={'/'} class="header-brand">one piece world</a>
 	<nav>
 		<ul>
-			<li><a href={'/portfolio'}>Portfolio</a></li>
 			<li><a href={'/about'}>About Us</a></li>
 			<li><a href={'/contact'}>Contact</a></li>
 		</ul>
@@ -125,7 +108,6 @@
 <footer>
 	<ul>
 		<li><a href={'/'}>Home</a></li>
-		<li><a href={'/portfolio'}>Portfolio</a></li>
 		<li><a href={'/about'}>About Us</a></li>
 		<li><a href={'/contact'}>Contact</a></li>
 	</ul>
@@ -164,6 +146,9 @@
 		border-radius: 20px;
 		
 	}
+	/* span[name]{
+
+	} */
 
 	.quantityBar {
 		height: 2rem;
@@ -208,14 +193,14 @@
 	input[name="plusQuantity"]:active {
 		background-color: gray;
 		position: absolute;
-		transform: translate(465%, 111%);
+		transform: translate(465%, 106%);
 
 	}
 
 	input[name="minusQuantity"]:active {
 		background-color: gray;
 		position: absolute;
-		transform: translate(10%, 111%)
+		transform: translate(10%, 106%)
 
 	}
 
@@ -246,7 +231,7 @@
 		border: 1px black solid ;
 
 		position: absolute;
-		transform: translate(1535%, -770%)
+		transform: translate(1535%, -715%)
 	}
 
 	#closebtn:hover {
@@ -258,7 +243,44 @@
 		border-radius: 50%;
 	}
 
-	#priceBar{
-		border: 1px black solid;
+	#totalPrice {
+		font-family: "Roboto", sans-serif;
+		font-size: 16px;
+		color: rgba(0,0,0,0.7);
+
+		position: absolute;
+		transform: translate(68%, 215%);
 	}
+
+	#priceBar{
+		color: rgba(0,0,0,0.7);
+		font-family: "Roboto", sans-serif;
+		font-size: 16px;
+
+	}
+
+	button[type="submit"]{
+		font-family: "Roboto", sans-serif;
+		padding: .7rem .7rem;
+		align-items: center;
+		border: 2px steelblue solid ;
+		border-radius: 30px;
+		color: steelblue;
+
+		position: absolute;
+		transform: translate(380%, 125%)
+	}
+
+	button[type="submit"]:hover {
+		background-color: steelblue;
+		color: white;
+
+		position: absolute;
+		transform: translate(380%, 125%)
+	}
+
+	button[type="submit"]:active {
+		transform: translate(380%, 130%)
+	}
+
 </style>

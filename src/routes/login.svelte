@@ -9,7 +9,7 @@
         
         try {
            await signInWithEmailAndPassword(auth, email, password)
-           goto('/shop')
+           goto('/')
         } catch (error) {
             alert(error.code)
         }
